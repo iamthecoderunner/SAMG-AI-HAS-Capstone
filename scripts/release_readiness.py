@@ -13,11 +13,18 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
-try:
-    from dotenv import load_dotenv
-    load_dotenv(ROOT/'.env',override=False)
-except ImportError:
-    pass
+
+def load_local_configuration():
+    """Load local .env only when explicitly running this report.
+
+    Importing `measure` from automated tests must never modify the
+    process environment or switch tests to a running Ollama provider.
+    """
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(ROOT/'.env',override=False)
+    except ImportError:
+        pass
 
 def measure() -> dict:
     sdk=importlib.util.find_spec('openai') is not None
@@ -49,6 +56,7 @@ def measure() -> dict:
     }
 
 if __name__=='__main__':
+    load_local_configuration()
     result=measure()
     print(json.dumps(result,indent=2))
     sys.exit(0)  # Status is an observation, not a test pass/fail.

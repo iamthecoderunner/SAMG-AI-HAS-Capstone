@@ -398,6 +398,44 @@ def valid_llm_citations(answer,sources):
     allowed={str(d['id']) for d in sources}
     return bool(refs) and refs.issubset(allowed)
 
+def relevant_sop_sources(question, sources):
+    """Fail closed when retrieved SOPs lack an observable topical link to the question.
+
+    Vector proximity alone is not evidence of relevance: a nearest neighbor is
+    returned even for nonsense/out-of-domain queries. Require either a concrete
+    SOP-title topic (not a boilerplate word such as "policy"), or at least two
+    shared non-stopword terms in the SOP text. This is a conservative lexical
+    backstop, not proof that the eventual answer is entailed by the evidence.
+    """
+    query_terms=set(tokens(question))
+    if not query_terms:
+        return []
+    generic_title={'sop','policy','procedure','troubleshooting','approved',
+                   'guidance','guide','instruction','instructions','document'}
+    relevant=[]
+    for doc in sources:
+        title_terms=set(tokens(doc.get('title','')))-generic_title
+        body_terms=set(tokens(doc.get('body','')))
+        if (query_terms & title_terms) or len(query_terms & body_terms)>=2:
+            relevant.append(doc)
+    return relevant
+
+
+def is_model_scope_refusal(answer):
+    """A model refusal cannot be laundered into an 'answered' cited SOP reply.
+
+    In particular, "cannot reset your password through this chatbot" is a
+    valid supported password-policy answer, not an out-of-domain refusal.
+    """
+    return bool(re.search(
+        r'(?i)\b(?:out(?:side)?\s+of\s+(?:the\s+|our\s+)?scope'
+        r'|outside\s+(?:the\s+|our\s+)?(?:scope|IT\s+(?:support|services?))'
+        r'|not\s+(?:within|related\s+to)\s+(?:our\s+|the\s+)?(?:IT\s+)?(?:support|scope)'
+        r'|we\s+do\s+not\s+(?:support|provide\s+(?:assistance|guidance))'
+        r'|(?:I|we)\s+(?:cannot|can.t)\s+(?:verify|answer)\s+(?:this|that|the\s+question)'
+        r'|no\s+(?:approved|relevant)\s+(?:SOP|policy|information))\b', answer))
+
+
 def verified_sop_extract_fallback(question, sources):
     """Fail-safe recovery for *uncited* model answers to known troubleshooting queries.
 
@@ -490,7 +528,7 @@ def validated_ollama_answer(message, sources):
     except (ValueError,TypeError):
         # Existing citation-enforced plaintext path remains safe when the
         # installed Ollama version cannot produce schema output.
-        return raw if valid_llm_citations(raw,sources) else None
+        return raw if valid_llm_citations(raw,sources) and not is_model_scope_refusal(raw) else None
     if not isinstance(data,dict) or set(data)!={'answer','citation_ids'}:
         return None
     answer=final_answer_only(data.get('answer'))
@@ -507,7 +545,7 @@ def validated_ollama_answer(message, sources):
     inline=set(re.findall(r'\[(\d+)\]',answer))
     if inline and not inline.issubset(set(ref_ids)):
         return None
-    if re.search(r'(?i)\b(?:cannot verify|not enough information|unable to answer)\b',answer):
+    if re.search(r'(?i)\b(?:cannot verify|not enough information|unable to answer)\b',answer) or is_model_scope_refusal(answer):
         return None
     if re.search(r'(?i)(?:ignore previous instructions|reveal (?:the )?system prompt|\b(?:api[_ -]?key|secret token)\b)',answer):
         return None
@@ -518,8 +556,9 @@ def validated_ollama_answer(message, sources):
 
 
 def generate(question, sources):
-    sources=topic_restricted_sources(question,sources)
     if not sources:return None,'no_context'
+    sources=relevant_sop_sources(question,topic_restricted_sources(question,sources))
+    if not sources:return None,'no_relevant_context'
     provider=ai_provider()
     if provider=='ollama':
         try:
@@ -594,7 +633,7 @@ def generate(question, sources):
                 {'role':'user','content':'Approved knowledge:\n'+evidence+'\n\nQuestion: '+minimize_pii(question)}])
             answer=final_answer_only(result.choices[0].message.content or '')
             if not answer:raise ValueError('Empty answer')
-            if not valid_llm_citations(answer,sources):
+            if not valid_llm_citations(answer,sources) or is_model_scope_refusal(answer):
                 return None,'llm_citation_invalid'
             return answer,'openai'
         except Exception:
