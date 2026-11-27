@@ -1,0 +1,43 @@
+services:
+  aihas:
+    build:
+      context: .
+      args:
+        INCLUDE_SEMANTIC: ${INSTALL_SEMANTIC:-1}
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      AIHAS_DB: /data/aihas.db
+      CHROMA_PATH: /data/chroma
+      OLLAMA_BASE_URL: ${DOCKER_OLLAMA_URL:-http://host.docker.internal:11434}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - aihas_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/api/health',timeout=4)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+  outbox_worker:
+    build:
+      context: .
+      args:
+        INCLUDE_SEMANTIC: ${INSTALL_SEMANTIC:-1}
+    command: ["python", "scripts/worker_outbox.py", "--interval", "10"]
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      AIHAS_DB: /data/aihas.db
+    volumes:
+      - aihas_data:/data
+    restart: unless-stopped
+    depends_on:
+      - aihas
+volumes:
+  aihas_data:

@@ -1,0 +1,3 @@
+# Optional: only needed for paid OpenAI API integration.
+-r requirements-semantic.txt
+openai>=1.60,<3

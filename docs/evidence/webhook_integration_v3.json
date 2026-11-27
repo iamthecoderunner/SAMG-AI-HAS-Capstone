@@ -1,0 +1,16 @@
+{
+  "executed_at_utc": "2026-11-25T02:09:34.731762+00:00",
+  "integration": "Two independent local HTTP services (AI-HAS and independent sandbox webhook receiver)",
+  "checks": {
+    "real_http_delivery": true,
+    "signature_verified": true,
+    "notification_persisted": true,
+    "idempotent_retry_no_duplicate": true,
+    "unsigned_request_rejected": true,
+    "expired_request_rejected": true
+  },
+  "result": "PASS",
+  "n8n_verified": false,
+  "jira_verified": false,
+  "production_verified": false
+}

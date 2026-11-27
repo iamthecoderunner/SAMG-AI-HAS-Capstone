@@ -1,0 +1,15 @@
+{
+  "tested_utc": "2026-11-25T02:09:38+00:00",
+  "scope": "SMALL-LOAD real local Uvicorn+SQLite; offline TF-IDF, synthetic users/docs, not production",
+  "workers": 6,
+  "requests": 60,
+  "passed": 60,
+  "failed": 0,
+  "p50_ms": 10.7,
+  "p95_ms": 63.7,
+  "max_ms": 187.9,
+  "wall_time_seconds": 0.3,
+  "passed_check": true,
+  "external_llm_verified": false,
+  "enterprise_load_test": false
+}

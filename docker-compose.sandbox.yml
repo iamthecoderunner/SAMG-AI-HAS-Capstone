@@ -1,0 +1,37 @@
+# Two-service sandbox demo with a real signed HTTP receiver.
+# Plain HTTP is permissible only inside this isolated Compose network.
+services:
+  aihas:
+    environment:
+      N8N_WEBHOOK_URL: http://sandbox_receiver:8001/webhook/ticket
+      ALLOW_HTTP_WEBHOOK: '1'
+    depends_on:
+      sandbox_receiver:
+        condition: service_healthy
+  outbox_worker:
+    environment:
+      N8N_WEBHOOK_URL: http://sandbox_receiver:8001/webhook/ticket
+      ALLOW_HTTP_WEBHOOK: '1'
+    depends_on:
+      sandbox_receiver:
+        condition: service_healthy
+  sandbox_receiver:
+    build:
+      context: .
+      dockerfile: Dockerfile.sandbox
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      WEBHOOK_DEMO_DB: /data/notifications.db
+    expose:
+      - '8001'
+    volumes:
+      - sandbox_webhook_data:/data
+    healthcheck:
+      test: ['CMD','python','-c',"import urllib.request;urllib.request.urlopen('http://127.0.0.1:8001/health',timeout=3)"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+volumes:
+  sandbox_webhook_data:

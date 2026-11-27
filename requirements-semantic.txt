@@ -1,0 +1,3 @@
+-r requirements.txt
+# ChromaDB semantic retrieval supports free Ollama embeddings or optional paid OpenAI embeddings.
+chromadb>=0.6,<2

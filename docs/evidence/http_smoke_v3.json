@@ -1,0 +1,22 @@
+{
+  "executed_utc": "2026-11-25T02:09:31.689835+00:00",
+  "test": "Real local Uvicorn HTTP, browser cookie-compatible requests, SQLite; no external API",
+  "all_passed": true,
+  "checks": [
+    "HTTP health endpoint + real SQLite connection",
+    "Unauthorized ticket list is denied",
+    "Cookie-based employee login via real HTTP",
+    "Offline grounded SOP response + source IDs via HTTP",
+    "Real HTTP answer-resolution feedback + duplicate prevention",
+    "Real HTTP ticket create + idempotent retry",
+    "RBAC blocks employee ticket mutation",
+    "Approval request persists via HTTP",
+    "Agent state transition + simulated approval + live KPI aggregation",
+    "Ticket and approval persist across complete server restart",
+    "Self-reported resolution counter persists after server restart",
+    "Admin outbox reflects persisted webhook event"
+  ],
+  "count": 12,
+  "external_llm_verified": false,
+  "external_webhook_verified": false
+}

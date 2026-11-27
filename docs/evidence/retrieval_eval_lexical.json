@@ -1,0 +1,207 @@
+{
+  "evaluated_at_utc": "2026-11-25T02:09:36.154076+00:00",
+  "retrieval_type": "local TF-IDF lexical (NOT semantic RAG, NOT an LLM evaluation)",
+  "corpus": "6 synthetic seeded SOPs",
+  "cases": 22,
+  "positive_cases": 18,
+  "negative_cases": 4,
+  "recall_at_3": 1.0,
+  "unsupported_abstention_rate": 1.0,
+  "cases_passed": 22,
+  "details": [
+    {
+      "case_id": "LR-01",
+      "query": "How do I troubleshoot VPN connection failures?",
+      "expected": "VPN troubleshooting SOP",
+      "retrieved": [
+        "VPN troubleshooting SOP"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-02",
+      "query": "The VPN client is disconnected. What should I check?",
+      "expected": "VPN troubleshooting SOP",
+      "retrieved": [
+        "VPN troubleshooting SOP"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-03",
+      "query": "What if VPN error continues after restarting?",
+      "expected": "VPN troubleshooting SOP",
+      "retrieved": [
+        "VPN troubleshooting SOP"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-04",
+      "query": "Can I reset my password through this chatbot?",
+      "expected": "Password reset policy",
+      "retrieved": [
+        "Password reset policy"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-05",
+      "query": "I forgot my password and need account reset assistance",
+      "expected": "Password reset policy",
+      "retrieved": [
+        "Password reset policy"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-06",
+      "query": "Should I disclose current password when requesting reset?",
+      "expected": "Password reset policy",
+      "retrieved": [
+        "Password reset policy"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-07",
+      "query": "How can I request access to new software?",
+      "expected": "Software access policy",
+      "retrieved": [
+        "Software access policy",
+        "Password reset policy"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-08",
+      "query": "Does an agent approve software provisioning?",
+      "expected": "Software access policy",
+      "retrieved": [
+        "Software access policy"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-09",
+      "query": "I need software for work, what request information should I provide?",
+      "expected": "Software access policy",
+      "retrieved": [
+        "Software access policy"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-10",
+      "query": "What should I do if company email does not synchronize?",
+      "expected": "Email troubleshooting",
+      "retrieved": [
+        "Email troubleshooting"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-11",
+      "query": "Mail application not syncing with service",
+      "expected": "Email troubleshooting",
+      "retrieved": [
+        "Email troubleshooting"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-12",
+      "query": "How to restart the email app when it cannot sync?",
+      "expected": "Email troubleshooting",
+      "retrieved": [
+        "Email troubleshooting"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-13",
+      "query": "My MFA authentication code is not working",
+      "expected": "MFA troubleshooting",
+      "retrieved": [
+        "MFA troubleshooting"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-14",
+      "query": "What are approved backup methods for multi factor authentication?",
+      "expected": "MFA troubleshooting",
+      "retrieved": [
+        "MFA troubleshooting"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-15",
+      "query": "My MFA device time is wrong and I am locked out",
+      "expected": "MFA troubleshooting",
+      "retrieved": [
+        "MFA troubleshooting"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-16",
+      "query": "How do I escalate unresolved IT issues?",
+      "expected": "Ticket escalation procedure",
+      "retrieved": [
+        "Ticket escalation procedure",
+        "Email troubleshooting"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-17",
+      "query": "What happens after a support ticket is created?",
+      "expected": "Ticket escalation procedure",
+      "retrieved": [
+        "Ticket escalation procedure",
+        "VPN troubleshooting SOP"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-18",
+      "query": "Who updates helpdesk ticket status?",
+      "expected": "Ticket escalation procedure",
+      "retrieved": [
+        "Ticket escalation procedure",
+        "Email troubleshooting"
+      ],
+      "pass": true
+    },
+    {
+      "case_id": "LR-19",
+      "query": "How to pilot a spacecraft through a wormhole?",
+      "expected": null,
+      "retrieved": [],
+      "pass": true
+    },
+    {
+      "case_id": "LR-20",
+      "query": "Quantum gravity starship fuel optimization",
+      "expected": null,
+      "retrieved": [],
+      "pass": true
+    },
+    {
+      "case_id": "LR-21",
+      "query": "How do I breed rainbow axolotls?",
+      "expected": null,
+      "retrieved": [],
+      "pass": true
+    },
+    {
+      "case_id": "LR-22",
+      "query": "Estimate cryptocurrency prices tomorrow",
+      "expected": null,
+      "retrieved": [],
+      "pass": true
+    }
+  ]
+}
